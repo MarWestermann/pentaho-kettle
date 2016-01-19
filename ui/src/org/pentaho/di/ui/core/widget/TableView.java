@@ -180,6 +180,7 @@ public class TableView extends Composite {
   private boolean showingBlueNullValues;
   private boolean showingConversionErrorsInline;
   private boolean isTextButton = false;
+  private boolean addIndexColumn = true;
 
   public TableView( VariableSpace space, Composite parent, int style, ColumnInfo[] columnInfo, int nrRows,
                     ModifyListener lsm, PropsUI pr ) {
@@ -187,7 +188,12 @@ public class TableView extends Composite {
   }
 
   public TableView( VariableSpace space, Composite parent, int style, ColumnInfo[] columnInfo, int nrRows,
-                    boolean readOnly, ModifyListener lsm, PropsUI pr ) {
+      boolean readOnly, ModifyListener lsm, PropsUI pr ) {
+    this( space, parent, style, columnInfo, nrRows, false, lsm, pr, true );
+  }
+  
+  public TableView( VariableSpace space, Composite parent, int style, ColumnInfo[] columnInfo, int nrRows,
+      boolean readOnly, ModifyListener lsm, PropsUI pr, final boolean addIndexColumn ) {
     super( parent, SWT.NO_BACKGROUND | SWT.NO_FOCUS | SWT.NO_MERGE_PAINTS | SWT.NO_RADIO_GROUP );
     this.parent = parent;
     this.columns = columnInfo;
@@ -196,6 +202,7 @@ public class TableView extends Composite {
     this.readonly = readOnly;
     this.clipboard = null;
     this.variables = space;
+    this.addIndexColumn = addIndexColumn;
 
     sortfield = 0;
     sortfieldLast = -1;
@@ -263,7 +270,7 @@ public class TableView extends Composite {
     tablecolumn[0] = new TableColumn( table, SWT.RIGHT );
     tablecolumn[0].setResizable( true );
     tablecolumn[0].setText( "#" );
-    tablecolumn[0].setWidth( 25 );
+    tablecolumn[0].setWidth( addIndexColumn ? 25 : 0 );
     tablecolumn[0].setAlignment( SWT.RIGHT );
 
     for ( int i = 0; i < columns.length; i++ ) {
@@ -2144,7 +2151,9 @@ public class TableView extends Composite {
       if ( Const.isOSX() || Const.isLinux() ) {
         strmax *= 1.4;
       }
-      tablecolumn[colnr].setWidth( strmax + 30 );
+      if ( colnr > 0 || ( colnr == 0 && addIndexColumn ) ) {
+        tablecolumn[colnr].setWidth( strmax + 30 );
+      }
 
       // On linux, this causes the text to select everything...
       // This is because the focus is lost and re-gained. Nothing we can do
@@ -2401,7 +2410,9 @@ public class TableView extends Composite {
         // Platform specific code not needed any more with current version SWT
         // if (Const.isOSX() || Const.isLinux()) max*=1.25;
         if ( tc.getWidth() != max + extra ) {
-          tc.setWidth( max + extra );
+          if ( c > 0 || ( c == 0 && addIndexColumn ) ) { 
+            tc.setWidth( max + extra );
+          }
         }
       } catch ( Exception e ) {
         // Ignore errors
