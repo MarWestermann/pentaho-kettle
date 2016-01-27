@@ -44,6 +44,7 @@ import org.pentaho.di.job.JobMeta;
 import org.pentaho.di.job.entry.JobEntryCopy;
 import org.pentaho.di.ui.core.dialog.ConfigurationDialog;
 import org.pentaho.di.ui.core.dialog.ErrorDialog;
+import org.pentaho.di.ui.core.gui.GUIResource;
 import org.pentaho.di.ui.spoon.Spoon;
 
 public class JobExecutionConfigurationDialog extends ConfigurationDialog {
@@ -184,7 +185,7 @@ public class JobExecutionConfigurationDialog extends ConfigurationDialog {
 
   public boolean open() {
 
-    mainLayout( PKG, "JobExecutionConfigurationDialog" );
+    mainLayout( PKG, "JobExecutionConfigurationDialog", GUIResource.getInstance().getImageJobGraph() );
 
     environmentTypeSectionLayout( PKG, "JobExecutionConfigurationDialog" );
     optionsSectionLayout( PKG, "JobExecutionConfigurationDialog" );

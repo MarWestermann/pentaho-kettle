@@ -47,9 +47,12 @@ import org.pentaho.di.base.AbstractMeta;
 import org.pentaho.di.core.Const;
 import org.pentaho.di.i18n.BaseMessages;
 import org.pentaho.di.ui.core.PropsUI;
+import org.pentaho.di.ui.core.gui.GUIResource;
 import org.pentaho.di.ui.core.gui.WindowProperty;
 import org.pentaho.di.ui.core.widget.ColumnInfo;
 import org.pentaho.di.ui.core.widget.TableView;
+import org.pentaho.di.ui.spoon.Spoon;
+import org.pentaho.di.ui.util.HelpUtils;
 
 public class ArgumentsDialog extends Dialog {
 
@@ -66,7 +69,7 @@ public class ArgumentsDialog extends Dialog {
    * @param parent
    * @param style
    */
-  public ArgumentsDialog( Shell parent, ExecutionConfiguration configuration, AbstractMeta abstractMeta ) {
+  public ArgumentsDialog( final Shell parent, ExecutionConfiguration configuration, AbstractMeta abstractMeta ) {
     super( parent );
     this.configuration = configuration;
 
@@ -74,23 +77,15 @@ public class ArgumentsDialog extends Dialog {
     shell = new Shell( parent, SWT.DIALOG_TRIM | SWT.MIN | SWT.APPLICATION_MODAL );
     props = PropsUI.getInstance();
     props.setLook( shell );
+    shell.setImage( parent.getImage() );
     shell.setLayout( new FormLayout() );
-    shell.setText( BaseMessages.getString( PKG, "ArgumentsDialog.Arguments.Label" ) ); 
-
-    Label argumentsLabel = new Label( shell, SWT.NONE );
-    props.setLook( argumentsLabel );
-    FormData fd_argumentsLabel = new FormData();
-    fd_argumentsLabel.right = new FormAttachment( 0, 197 );
-    fd_argumentsLabel.top = new FormAttachment( 0, 15 );
-    fd_argumentsLabel.left = new FormAttachment( 0, 15 );
-    argumentsLabel.setLayoutData( fd_argumentsLabel );
-    argumentsLabel.setText( BaseMessages.getString( PKG, "ArgumentsDialog.Description.Label" ) );
+    shell.setText( BaseMessages.getString( PKG, "ArgumentsDialog.Arguments.Label" ) );
 
     ColumnInfo[] cArguments =
         { new ColumnInfo( BaseMessages.getString( PKG, "ArgumentsDialog.ArgumentsColumn.Argument" ),
-            ColumnInfo.COLUMN_TYPE_TEXT, false, true ), // Argument name
+            ColumnInfo.COLUMN_TYPE_TEXT, false, true, 180 ), // Argument name
           new ColumnInfo( BaseMessages.getString( PKG, "ArgumentsDialog.ArgumentsColumn.Value" ),
-              ColumnInfo.COLUMN_TYPE_TEXT, false, false ), // Actual value
+              ColumnInfo.COLUMN_TYPE_TEXT, false, false, 172 ), // Actual value
     };
 
     int nrArguments = configuration.getArguments() != null ? configuration.getArguments().size() : 0;
@@ -100,8 +95,8 @@ public class ArgumentsDialog extends Dialog {
             null, props, false );
 
     FormData fd_argumentsTable = new FormData();
-    fd_argumentsTable.top = new FormAttachment( argumentsLabel, 10 );
-    fd_argumentsTable.left = new FormAttachment( argumentsLabel, 0, SWT.LEFT );
+    fd_argumentsTable.top = new FormAttachment( 0, 15 );
+    fd_argumentsTable.left = new FormAttachment( 0, 15 );
     fd_argumentsTable.bottom = new FormAttachment( 0, 221 );
     fd_argumentsTable.right = new FormAttachment( 0, 371 );
     wArguments.setLayoutData( fd_argumentsTable );
@@ -136,6 +131,24 @@ public class ArgumentsDialog extends Dialog {
     cancelButton.addSelectionListener( new SelectionAdapter() {
       public void widgetSelected( SelectionEvent e ) {
         dispose();
+      }
+    } );
+
+    Button btnHelp = new Button( shell, SWT.NONE );
+    btnHelp.setImage( GUIResource.getInstance().getImageHelpWeb() );
+    btnHelp.setText( BaseMessages.getString( PKG, "System.Button.Help" ) );
+    btnHelp.setToolTipText( BaseMessages.getString( PKG, "System.Tooltip.Help" ) );
+    FormData fd_btnHelp = new FormData();
+    fd_btnHelp.top = new FormAttachment( separator, 13 );
+    fd_btnHelp.left = new FormAttachment( separator, 0, SWT.LEFT );
+    btnHelp.setLayoutData( fd_btnHelp );
+    btnHelp.addSelectionListener( new SelectionAdapter() {
+      @Override
+      public void widgetSelected( SelectionEvent evt ) {
+        String docUrl = BaseMessages.getString( Spoon.class, "Spoon.ArgumentsDialog.Help" );
+        String docTitle = BaseMessages.getString( PKG, "ArgumentsDialog.docTitle" );
+        String docHeader = BaseMessages.getString( PKG, "ArgumentsDialog.docHeader" );
+        HelpUtils.openHelpDialog( parent.getShell(), docTitle, docUrl, docHeader );
       }
     } );
 

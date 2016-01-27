@@ -46,6 +46,7 @@ import org.pentaho.di.trans.TransExecutionConfiguration;
 import org.pentaho.di.trans.TransMeta;
 import org.pentaho.di.ui.core.dialog.ConfigurationDialog;
 import org.pentaho.di.ui.core.dialog.ErrorDialog;
+import org.pentaho.di.ui.core.gui.GUIResource;
 import org.pentaho.di.ui.spoon.Spoon;
 
 public class TransExecutionConfigurationDialog extends ConfigurationDialog {
@@ -174,7 +175,7 @@ public class TransExecutionConfigurationDialog extends ConfigurationDialog {
 
   public boolean open() {
 
-    mainLayout( PKG, "TransExecutionConfigurationDialog" );
+    mainLayout( PKG, "TransExecutionConfigurationDialog", GUIResource.getInstance().getImageTransGraph() );
     environmentTypeSectionLayout( PKG, "TransExecutionConfigurationDialog" );
 
     wExecCluster = new Button( gLocal, SWT.RADIO );

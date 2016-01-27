@@ -34,6 +34,7 @@ import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FormAttachment;
@@ -217,11 +218,11 @@ public abstract class ConfigurationDialog extends Dialog {
     this.configuration = configuration;
   }
 
-  protected void mainLayout( Class<?> PKG, String prefix ) {
+  protected void mainLayout( Class<?> PKG, String prefix, Image img ) {
     display = parent.getDisplay();
     shell = new Shell( parent, SWT.DIALOG_TRIM | SWT.MIN | SWT.APPLICATION_MODAL );
     props.setLook( shell );
-    shell.setImage( GUIResource.getInstance().getImageTransGraph() );
+    shell.setImage( img );
     shell.setLayout( new FormLayout() );
     shell.setText( BaseMessages.getString( PKG, prefix + ".Shell.Title" ) );
   }
@@ -265,15 +266,15 @@ public abstract class ConfigurationDialog extends Dialog {
 
     ColumnInfo[] cParams =
         { new ColumnInfo( BaseMessages.getString( PKG, prefix + ".ParamsColumn.Argument" ), ColumnInfo.COLUMN_TYPE_TEXT,
-            false, true ), // Stepname
+            false, true, 126 ), // Stepname
           new ColumnInfo( BaseMessages.getString( PKG, prefix + ".ParamsColumn.Default" ), ColumnInfo.COLUMN_TYPE_TEXT,
-              false, true ), // Preview size
+              false, true, 138 ), // Preview size
 
           new ColumnInfo( BaseMessages.getString( PKG, prefix + ".ParamsColumn.Value" ), ColumnInfo.COLUMN_TYPE_TEXT,
-              false, false ), // Preview size
+              false, false, 142 ), // Preview size
 
           new ColumnInfo( BaseMessages.getString( PKG, prefix + ".ParamsColumn.Description" ),
-              ColumnInfo.COLUMN_TYPE_TEXT, false, true ), // Preview size
+              ColumnInfo.COLUMN_TYPE_TEXT, false, true, 181 ), // Preview size
     };
 
     String[] namedParams = abstractMeta.listParameters();
@@ -314,9 +315,9 @@ public abstract class ConfigurationDialog extends Dialog {
 
     ColumnInfo[] cVariables =
         { new ColumnInfo( BaseMessages.getString( PKG, prefix + ".VariablesColumn.Argument" ),
-            ColumnInfo.COLUMN_TYPE_TEXT, false, false ), // Stepname
+            ColumnInfo.COLUMN_TYPE_TEXT, false, false, 287 ), // Stepname
           new ColumnInfo( BaseMessages.getString( PKG, prefix + ".VariablesColumn.Value" ), ColumnInfo.COLUMN_TYPE_TEXT,
-              false, false ), // Preview size
+              false, false, 300 ), // Preview size
     };
 
     int nrVariables = configuration.getVariables() != null ? configuration.getVariables().size() : 0;
@@ -328,7 +329,7 @@ public abstract class ConfigurationDialog extends Dialog {
     fdVariables.top = new FormAttachment( 0, 10 );
     fdVariables.left = new FormAttachment( 0, 10 );
     fdVariables.bottom = new FormAttachment( 0, 221 );
-    fdVariables.right = new FormAttachment( 0, 598 );
+    fdVariables.right = new FormAttachment( 0, 601 );
 
     wVariables.setLayoutData( fdVariables );
   }
@@ -406,7 +407,7 @@ public abstract class ConfigurationDialog extends Dialog {
     btnHelp.setLayoutData( fd_btnHelp );
     btnHelp.addSelectionListener( new SelectionAdapter() {
       @Override
-      public void widgetSelected( SelectionEvent arg0 ) {
+      public void widgetSelected( SelectionEvent evt ) {
         HelpUtils.openHelpDialog( parent.getShell(), docTitle, docUrl, docHeader );
       }
     } );

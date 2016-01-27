@@ -2151,9 +2151,7 @@ public class TableView extends Composite {
       if ( Const.isOSX() || Const.isLinux() ) {
         strmax *= 1.4;
       }
-      if ( colnr > 0 || ( colnr == 0 && addIndexColumn ) ) {
-        tablecolumn[colnr].setWidth( strmax + 30 );
-      }
+      tablecolumn[colnr].setWidth( strmax + 30 );
 
       // On linux, this causes the text to select everything...
       // This is because the focus is lost and re-gained. Nothing we can do
@@ -2411,7 +2409,11 @@ public class TableView extends Composite {
         // if (Const.isOSX() || Const.isLinux()) max*=1.25;
         if ( tc.getWidth() != max + extra ) {
           if ( c > 0 || ( c == 0 && addIndexColumn ) ) { 
-            tc.setWidth( max + extra );
+            if ( columns[c - 1].getWidth() == -1 ) {
+              tc.setWidth( max + extra );
+            } else {
+              tc.setWidth( columns[c - 1].getWidth() );
+            }
           }
         }
       } catch ( Exception e ) {
